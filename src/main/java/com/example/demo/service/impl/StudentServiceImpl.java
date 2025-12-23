@@ -28,4 +28,15 @@ public class StudentServiceImpl {
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         return studentRepository.save(student);
     }
+
+    public String login(String email, String password) {
+        Student student = studentRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(password, student.getPassword())) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+
+        return jwtTokenProvider.generateToken(student.getEmail(), student.getRole(), student.getId());
+    }
 }
