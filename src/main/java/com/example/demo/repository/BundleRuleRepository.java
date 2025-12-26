@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BundleRuleRepository extends JpaRepository<BundleRule, Long> {
-    List<BundleRule> findByActiveTrue();
+    List<BundleRule> findByActiveTrue(); // Fetch only active rules [cite: 182]
 }

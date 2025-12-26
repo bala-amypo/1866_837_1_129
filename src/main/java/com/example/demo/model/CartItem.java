@@ -4,15 +4,13 @@ import jakarta.persistence.*;
 
 @Entity
 public class CartItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Cart cart;
-    @ManyToOne
-    private Product product;
+    @ManyToOne private Cart cart;
+    @ManyToOne private Product product;
     private Integer quantity;
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Cart getCart() { return cart; }
