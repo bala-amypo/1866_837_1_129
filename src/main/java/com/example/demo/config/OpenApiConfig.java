@@ -17,4 +17,4 @@ public class OpenApiConfig {
                         new Server().url("https://9193.408procr.amypo.ai/")
                 ));
     }
-}
+}kill -9 $(lsof -t -i:8080)
