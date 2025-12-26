@@ -84,3 +84,4 @@
         </plugins>
     </build>
 </project>
+fuser -k 8080/tcpfuser
