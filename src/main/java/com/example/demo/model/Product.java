@@ -1,8 +1,8 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -12,15 +12,8 @@ public class Product {
     @Column(unique = true)
     private String sku;
     private String name;
-    private String category;
     private BigDecimal price;
-    private Boolean active;
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    private Boolean active = true;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
