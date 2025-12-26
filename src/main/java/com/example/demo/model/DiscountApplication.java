@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -16,11 +16,6 @@ public class DiscountApplication {
     private BigDecimal discountAmount;
     private LocalDateTime appliedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        appliedAt = LocalDateTime.now();
-    }
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Cart getCart() { return cart; }
@@ -29,4 +24,6 @@ public class DiscountApplication {
     public void setBundleRule(BundleRule bundleRule) { this.bundleRule = bundleRule; }
     public BigDecimal getDiscountAmount() { return discountAmount; }
     public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
+    public LocalDateTime getAppliedAt() { return appliedAt; }
+    public void setAppliedAt(LocalDateTime appliedAt) { this.appliedAt = appliedAt; }
 }
