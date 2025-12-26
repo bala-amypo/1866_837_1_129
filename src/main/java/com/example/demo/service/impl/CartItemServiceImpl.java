@@ -1,38 +1,31 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.model.Cart;
+import com.example.demo.repository.CartRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
-public class CartItemServiceImpl {
-    private final CartItemRepository cartItemRepository;
+public class CartServiceImpl {
     private final CartRepository cartRepository;
-    private final ProductRepository productRepository;
 
-    public CartItemServiceImpl(CartItemRepository cir, CartRepository cr, ProductRepository pr) {
-        this.cartItemRepository = cir;
+    public CartServiceImpl(CartRepository cr) {
         this.cartRepository = cr;
-        this.productRepository = pr;
     }
 
-    public CartItem addItemToCart(CartItem item) {
-        Cart cart = cartRepository.findById(item.getCart().getId()).orElseThrow();
-        Product product = productRepository.findById(item.getProduct().getId()).orElseThrow();
-        
-        if (!cart.getActive()) throw new IllegalArgumentException("Cannot add to inactive carts"); [cite: 209]
-        if (item.getQuantity() <= 0) throw new IllegalArgumentException("Quantity must be positive"); [cite: 210]
-
-        return cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId())
-            .map(existing -> {
-                existing.setQuantity(existing.getQuantity() + item.getQuantity());
-                return cartItemRepository.save(existing);
-            })
-            .orElseGet(() -> cartItemRepository.save(item)); [cite: 210]
+    public Cart createCart(Long userId) {
+        // Check for existing active cart [cite: 205]
+        return cartRepository.findByUserIdAndActiveTrue(userId).orElseGet(() -> {
+            Cart newCart = new Cart();
+            newCart.setUserId(userId);
+            newCart.setActive(true); // Default to true [cite: 165, 205]
+            return cartRepository.save(newCart);
+        });
     }
 
-    public List<CartItem> getItemsForCart(Long cartId) {
-        return cartItemRepository.findByCartId(cartId); [cite: 211]
+    public Cart getActiveCartForUser(Long userId) {
+        // Must throw specific exception message for tests [cite: 192, 206]
+        return cartRepository.findByUserIdAndActiveTrue(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Active cart not found")); [cite: 192, 206]
     }
 }
