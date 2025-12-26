@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.DiscountApplication;
-import com.example.demo.service.impl.DiscountServiceImpl;
+import com.example.demo.service.DiscountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -10,11 +10,12 @@ import java.util.List;
 @RequestMapping("/api/discounts")
 @Tag(name = "DiscountController")
 public class DiscountController {
-    private final DiscountServiceImpl discountService;
-    public DiscountController(DiscountServiceImpl ds) { this.discountService = ds; }
+    private final DiscountService discountService;
+
+    public DiscountController(DiscountService ds) { this.discountService = ds; }
 
     @PostMapping("/evaluate/{cartId}")
     public List<DiscountApplication> evaluate(@PathVariable Long cartId) { 
-        return discountService.evaluateDiscounts(cartId); [cite: 223]
+        return discountService.evaluateDiscounts(cartId);
     }
 }
