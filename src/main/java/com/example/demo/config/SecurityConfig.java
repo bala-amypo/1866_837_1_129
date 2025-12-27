@@ -41,5 +41,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
-mysqld_safe --datadir=/var/lib/mysql &
