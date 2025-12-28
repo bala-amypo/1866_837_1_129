@@ -5,23 +5,48 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "discount_applications")
 public class DiscountApplication {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne private Cart cart;
-    @ManyToOne private BundleRule bundleRule;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bundle_rule_id", nullable = false)
+    private BundleRule bundleRule;
+    
+    @Column(nullable = false)
     private BigDecimal discountAmount;
+    
+    @Column(nullable = false)
     private LocalDateTime appliedAt;
-
-    // Getters and Setters
+    
+    public DiscountApplication() {}
+    
+    public DiscountApplication(Cart cart, BundleRule bundleRule, BigDecimal discountAmount) {
+        this.cart = cart;
+        this.bundleRule = bundleRule;
+        this.discountAmount = discountAmount;
+        this.appliedAt = LocalDateTime.now();
+    }
+    
+    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    
     public Cart getCart() { return cart; }
     public void setCart(Cart cart) { this.cart = cart; }
+    
     public BundleRule getBundleRule() { return bundleRule; }
-    public void setBundleRule(BundleRule rule) { this.bundleRule = rule; }
+    public void setBundleRule(BundleRule bundleRule) { this.bundleRule = bundleRule; }
+    
     public BigDecimal getDiscountAmount() { return discountAmount; }
-    public void setDiscountAmount(BigDecimal amt) { this.discountAmount = amt; }
+    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
+    
     public LocalDateTime getAppliedAt() { return appliedAt; }
-    public void setAppliedAt(LocalDateTime at) { this.appliedAt = at; }
+    public void setAppliedAt(LocalDateTime appliedAt) { this.appliedAt = appliedAt; }
 }
