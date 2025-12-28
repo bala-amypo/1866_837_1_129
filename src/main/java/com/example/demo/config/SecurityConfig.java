@@ -1,43 +1,35 @@
 package com.example.demo.config;
 
-import com.example.demo.security.JwtAuthenticationFilter;
-import com.example.demo.security.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtTokenProvider tokenProvider;
-
-    public SecurityConfig(JwtTokenProvider tp) { 
-        this.tokenProvider = tp; 
-    }
-
-    // Define the filter as a Bean to avoid manual instantiation issues
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(tokenProvider);
-    }
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // Disable CSRF for APIs
             .csrf(csrf -> csrf.disable())
-            // CRITICAL: JWT apps must be stateless
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+            // Allow all requests
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/health", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
                 .anyRequest().permitAll()
             )
-            // Use the bean instead of 'new'
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        
+ 
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable());
+
         return http.build();
     }
 }

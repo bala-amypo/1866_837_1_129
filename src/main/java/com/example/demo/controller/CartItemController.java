@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.CartItem;
 import com.example.demo.service.CartItemService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -9,11 +10,18 @@ import java.util.List;
 @RequestMapping("/api/cart-items")
 public class CartItemController {
     private final CartItemService cartItemService;
-    public CartItemController(CartItemService cis) { this.cartItemService = cis; }
-
-    @PostMapping("/")
-    public CartItem addItem(@RequestBody CartItem item) { return cartItemService.addItemToCart(item); }
-
+    
+    public CartItemController(CartItemService cartItemService) {
+        this.cartItemService = cartItemService;
+    }
+    
+    @PostMapping
+    public ResponseEntity<CartItem> addItemToCart(@RequestBody CartItem cartItem) {
+        return ResponseEntity.ok(cartItemService.addItemToCart(cartItem));
+    }
+    
     @GetMapping("/cart/{cartId}")
-    public List<CartItem> getItems(@PathVariable Long cartId) { return cartItemService.getItemsForCart(cartId); }
+    public ResponseEntity<List<CartItem>> getCartItems(@PathVariable Long cartId) {
+        return ResponseEntity.ok(cartItemService.getItemsForCart(cartId));
+    }
 }
