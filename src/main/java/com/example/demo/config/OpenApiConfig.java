@@ -15,7 +15,7 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
 
         SecurityScheme bearerAuth = new SecurityScheme()
-                .type(SecurityScheme.)
+                .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
 
