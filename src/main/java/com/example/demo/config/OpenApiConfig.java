@@ -15,7 +15,7 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
 
         SecurityScheme bearerAuth = new SecurityScheme()
-                .type(SecurityScheme."https://9193.408procr.amypo.ai/")
+                .type(SecurityScheme.)
                 .scheme("bearer")
                 .bearerFormat("JWT");
 
