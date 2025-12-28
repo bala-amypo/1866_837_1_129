@@ -8,16 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class BundleRuleServiceImpl implements BundleRuleService {
     private final BundleRuleRepository bundleRuleRepository;
-
-    public BundleRuleServiceImpl(BundleRuleRepository brr) { this.bundleRuleRepository = brr; }
-
+    
+    public BundleRuleServiceImpl(BundleRuleRepository bundleRuleRepository) {
+        this.bundleRuleRepository = bundleRuleRepository;
+    }
+    
     @Override
     public BundleRule createRule(BundleRule rule) {
         if (rule.getDiscountPercentage() < 0 || rule.getDiscountPercentage() > 100) {
-            throw new IllegalArgumentException("between 0 and 100");
+            throw new IllegalArgumentException("Discount percentage must be between 0 and 100");
         }
         if (rule.getRequiredProductIds() == null || rule.getRequiredProductIds().trim().isEmpty()) {
-            throw new IllegalArgumentException("cannot be empty");
+            throw new IllegalArgumentException("Required product IDs cannot be empty");
         }
         return bundleRuleRepository.save(rule);
     }

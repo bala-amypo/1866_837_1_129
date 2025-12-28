@@ -4,11 +4,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenProvider {
+    
     public String generateToken(String email, String role, Long userId) {
-        return "token-123";
+        // Simple token generation for testing purposes
+        return "jwt-token-" + email + "-" + role + "-" + userId;
     }
-
+    
     public boolean validateToken(String token) {
-        return "valid".equals(token);
+        return token != null && token.startsWith("jwt-token-");
     }
 }
