@@ -1,10 +1,10 @@
 package com.example.demo.config;
 
-import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,18 +12,37 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI customOpenAPI() {
+    public OpenAPI openAPI() {
+
+        SecurityScheme bearerAuth = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT")
+                .in(SecurityScheme.In.HEADER)
+                .name("Authorization");
+
+        Server remoteServer = new Server()
+                .url("https://9193.408procr.amypo.ai/")
+                .description("Remote Dev Server");
+
+        Server localServer = new Server()
+                .url("http://localhost:8080")
+                .description("Local Server");
+
         return new OpenAPI()
                 .info(new Info()
-                        .title("Bundle & Save E-Commerce API")
+                        .title("E-Commerce Bundle & Save API")
                         .version("1.0")
-                        .description("API documentation for the E-Commerce Bundle Discount system"))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
-                                .name("bearerAuth")
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")));
+                        .description(
+                                "Secure REST API with JWT authentication, " +
+                                "role-based authorization, and bundle discount logic"
+                        )
+                )
+                .addServersItem(remoteServer)
+                .addServersItem(localServer)
+                .components(
+                        new Components()
+                                .addSecuritySchemes("bearerAuth", bearerAuth)
+                );
     }
 }
